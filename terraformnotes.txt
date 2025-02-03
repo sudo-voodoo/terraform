@@ -1,0 +1,99 @@
+where.exe <winget>
+	- Determine if winget executable exists on system
+
+WinKey > "Environment Variables"
+	- Add line for terraform dir
+
+AWS Region: us-east-1
+
+Create the following terraform.tf in working dir:
+# Importing aws provider
+terraform {
+    required_providers {
+        aws = {
+            source = "hashicorp/aws"
+            version = "~> 5.0"
+        }
+    }
+}
+
+# Configure aws provider
+provider "aws" {
+    region = "us-east-1"
+}
+
+# Create VPC
+resource "aws_vpc" "myvpc" {
+    cidr_block = "10.0.0.0/16"
+}
+
+Install awsCLI v2 from powershell:
+	C:\> msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
+Relaunch powershell
+	aws --version
+
+In AWS console:
+	click name in top right
+	Security Credentials
+	Under Access keys
+	Create access key
+	CLI
+
+From powershell
+	aws configure
+	Enter AWS Access Key ID from the key created earlier
+	AWS Secret Access Key from earlier
+	Default region name: us-east-1
+	Default output format: None
+
+In powershell:
+	terraform init
+	terraform apply (should create the VPC)_
+
+PS C:\Users\devri\OneDrive\Documents\terraform> terraform apply
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
+following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_vpc.myvpc will be created
+  + resource "aws_vpc" "myvpc" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "10.0.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = (known after apply)
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + tags_all                             = (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+aws_vpc.myvpc: Creating...
+aws_vpc.myvpc: Creation complete after 1s [id=vpc-09b293032e7df7254]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+TIP: terraform fmt (This auto updates all .tf files in your working directory with pretty formatting/spacing)
+     terraform validate (Will make sure syntax is correct)
+
+
+
